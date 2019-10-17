@@ -2,7 +2,12 @@ import { join } from 'path'
 import { NodePath } from '@babel/core'
 import * as t from '@babel/types'
 import { State } from '../types'
-import { dotPath, objectProperty, getObjectProperties } from '../utils'
+import {
+  dotPath,
+  objectProperty,
+  getObjectProperties,
+  createHash,
+} from '../utils'
 import { isImportLocalName } from '../utils/isImportLocalName'
 import { getPrefix } from '../utils/getPrefix'
 // import blog from 'babel-log'
@@ -12,15 +17,15 @@ const getId = (path: NodePath, prefix: string) => {
 
   if (path.isStringLiteral()) {
     name = path.node.value
-  } else if (path.isIdentifier()) {
+    return dotPath(join(prefix, createHash(name)))
+  }
+
+  if (path.isIdentifier()) {
     name = path.node.name
+    return dotPath(join(prefix, createHash(name)))
   }
 
-  if (!name) {
-    throw new Error(`requires Object key or string literal`)
-  }
-
-  return dotPath(join(prefix, name))
+  throw new Error(`requires Object key or string literal`)
 }
 
 const getLeadingComment = (prop: NodePath) => {
@@ -60,9 +65,21 @@ const replaceProperties = (
       })
 
       if (isNotHaveId) {
-        const id = getId(objectKeyPath, prefix)
+        const defaultMessageProp = objProps.find(v => {
+          const keyPath = v.get('key')
+          return (
+            !Array.isArray(keyPath) && keyPath.node.name === 'defaultMessage'
+          )
+        })
 
-        messageDescriptorProperties.push(objectProperty('id', id))
+        if (
+          defaultMessageProp &&
+          defaultMessageProp.get('value').isStringLiteral()
+        ) {
+          const id = getId(defaultMessageProp.get('value'), prefix)
+
+          messageDescriptorProperties.push(objectProperty('id', id))
+        }
       }
 
       messageDescriptorProperties.push(...objProps.map(v => v.node))
@@ -80,7 +97,7 @@ const replaceProperties = (
     } else {
       const evaluated = prop.get('value').evaluate()
       if (evaluated.confident && typeof evaluated.value === 'string') {
-        const id = dotPath(join(prefix, evaluated.value))
+        const id = dotPath(join(prefix, createHash(evaluated.value)))
 
         messageDescriptorProperties.push(
           objectProperty('id', id),
