@@ -20,6 +20,14 @@ const getId = (path: NodePath, prefix: string) => {
     return dotPath(join(prefix, createHash(name)))
   }
 
+  if (path.isTemplateLiteral()) {
+    const evaluated = path.evaluate()
+
+    if (evaluated.confident && typeof evaluated.value === 'string') {
+      return dotPath(join(prefix, createHash(evaluated.value)))
+    }
+  }
+
   if (path.isIdentifier()) {
     name = path.node.name
     return dotPath(join(prefix, createHash(name)))
@@ -35,7 +43,16 @@ const getLeadingComment = (prop: NodePath) => {
     : null
 }
 
-// eslint-disable-next-line max-lines-per-function
+const getDefaultMessageProp = (
+  objProps: NodePath<t.ObjectProperty>[]
+): NodePath<t.ObjectProperty> | undefined => {
+  return objProps.find(v => {
+    const keyPath = v.get('key')
+    return !Array.isArray(keyPath) && keyPath.node.name === 'defaultMessage'
+  })
+}
+
+// eslint-disable-next-line max-lines-per-function, max-statements
 const replaceProperties = (
   properties: NodePath<t.ObjectProperty>[],
   state: State,
@@ -48,6 +65,10 @@ const replaceProperties = (
     const objectKeyPath = prop.get('key')
     if (Array.isArray(objectKeyPath)) {
       return
+    }
+
+    if (objectKeyPath.isNumericLiteral()) {
+      throw new Error(`requires Object key or string literal`)
     }
 
     const messageDescriptorProperties: t.ObjectProperty[] = []
@@ -65,16 +86,12 @@ const replaceProperties = (
       })
 
       if (isNotHaveId) {
-        const defaultMessageProp = objProps.find(v => {
-          const keyPath = v.get('key')
-          return (
-            !Array.isArray(keyPath) && keyPath.node.name === 'defaultMessage'
-          )
-        })
+        const defaultMessageProp = getDefaultMessageProp(objProps)
 
         if (
           defaultMessageProp &&
-          defaultMessageProp.get('value').isStringLiteral()
+          (defaultMessageProp.get('value').isStringLiteral() ||
+            defaultMessageProp.get('value').isTemplateLiteral())
         ) {
           const id = getId(defaultMessageProp.get('value'), prefix)
 
@@ -88,7 +105,7 @@ const replaceProperties = (
       objectValuePath.isTemplateLiteral()
     ) {
       // 'hello' or `hello ${user}`
-      const id = getId(objectKeyPath, prefix)
+      const id = getId(objectValuePath, prefix)
 
       messageDescriptorProperties.push(
         objectProperty('id', id),

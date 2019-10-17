@@ -138,7 +138,7 @@ hello({
 
   multiExportTest,
   {
-    title: 'throw error when key is NumiricLiteral',
+    title: 'throw error when key is NumericLiteral',
     code: `
 import { defineMessages } from 'react-intl'
 
