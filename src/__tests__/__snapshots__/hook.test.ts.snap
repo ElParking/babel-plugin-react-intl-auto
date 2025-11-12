@@ -43,7 +43,6 @@ const Component2 = () => {
       ↓ ↓ ↓ ↓ ↓ ↓
 
 import { useIntl } from 'react-intl';
-
 const Component2 = () => {
   const intl = useIntl();
   const label = intl.formatMessage({

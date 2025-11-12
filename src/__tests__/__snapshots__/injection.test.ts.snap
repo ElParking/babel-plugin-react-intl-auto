@@ -43,7 +43,6 @@ injectIntl(Components2);
       ↓ ↓ ↓ ↓ ↓ ↓
 
 import { injectIntl } from 'react-intl';
-
 const Component2 = ({
   intl
 }) => {
@@ -61,7 +60,6 @@ const Component2 = ({
     })}
     </button>;
 };
-
 injectIntl(Components2);
 
 `;
