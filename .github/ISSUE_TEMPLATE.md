@@ -8,7 +8,7 @@ English/日本語(日本語で入力して大丈夫です。日本語の方が�
 
 * version:
 * `node` version:
-* `npm` (or `yarn`) version:
+* package manager (`npm`, `pnpm`, etc.) and version:
 
 **Do you want to request a _feature_ or report a _bug_?:**
 

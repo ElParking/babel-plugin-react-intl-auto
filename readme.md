@@ -93,6 +93,15 @@ $ npm install --save-dev babel-plugin-react-intl-auto
 $ npm install --save-dev @babel/plugin-transform-typescript
 ```
 
+pnpm
+
+```shell
+$ pnpm add --save-dev babel-plugin-react-intl-auto
+
+# Optional: TypeScript support
+$ pnpm add --save-dev @babel/plugin-transform-typescript
+```
+
 yarn
 
 ```shell

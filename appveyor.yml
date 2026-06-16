@@ -1,20 +1,21 @@
 environment:
-  nodejs_version: "8"
+  nodejs_version: "20"
 
 # Install scripts. (runs after repo cloning)
 install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
-  - npm install
+  - npm install --global pnpm
+  - pnpm install --frozen-lockfile
 
 # Post-install test scripts.
 test_script:
   # Output useful info for debugging.
   - node --version
-  - npm --version
+  - pnpm --version
   # run tests
-  - npm test
+  - pnpm test
 
 # Don't actually build.
 build: off
