@@ -1,11 +1,14 @@
 {
-  "name": "babel-plugin-react-intl-auto",
-  "version": "3.1.0",
+  "name": "@elparking/babel-plugin-react-intl-auto",
+  "version": "3.1.1",
   "main": "lib/index.js",
   "types": "types.d.ts",
   "description": "i18n for the component age. Auto management react-intl ID",
   "license": "MIT",
-  "repository": "akameco/babel-plugin-react-intl-auto",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElParking/babel-plugin-react-intl-auto.git"
+  },
   "author": {
     "name": "akameco",
     "email": "akameco.t@gmail.com",
@@ -55,6 +58,9 @@
     "lib",
     "types.d.ts"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "dependencies": {
     "@babel/core": "7.28.5",
     "@babel/traverse": "7.28.5",

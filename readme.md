@@ -84,10 +84,17 @@ en.json
 
 ## Install
 
+For GitHub Packages, configure your project or user npm settings first:
+
+```ini
+@elparking:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+```
+
 npm
 
 ```shell
-$ npm install --save-dev babel-plugin-react-intl-auto
+$ npm install --save-dev @elparking/babel-plugin-react-intl-auto
 
 # Optional: TypeScript support
 $ npm install --save-dev @babel/plugin-transform-typescript
@@ -96,7 +103,7 @@ $ npm install --save-dev @babel/plugin-transform-typescript
 pnpm
 
 ```shell
-$ pnpm add --save-dev babel-plugin-react-intl-auto
+$ pnpm add --save-dev @elparking/babel-plugin-react-intl-auto
 
 # Optional: TypeScript support
 $ pnpm add --save-dev @babel/plugin-transform-typescript
@@ -105,7 +112,7 @@ $ pnpm add --save-dev @babel/plugin-transform-typescript
 yarn
 
 ```shell
-$ yarn add --dev babel-plugin-react-intl-auto
+$ yarn add --dev @elparking/babel-plugin-react-intl-auto
 
 # Optional: TypeScript support
 $ yarn add --dev @babel/plugin-transform-typescript
@@ -392,7 +399,7 @@ you can also be empowered by [extract-react-intl-messages](https://github.com/ak
 
 ```json
 {
-  "include": ["node_modules/babel-plugin-react-intl-auto/**/*.d.ts"]
+  "include": ["node_modules/@elparking/babel-plugin-react-intl-auto/**/*.d.ts"]
 }
 ```
 
